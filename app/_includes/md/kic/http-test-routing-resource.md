@@ -3,6 +3,7 @@
 {%- assign name = include.name | default: 'echo' %}
 {%- assign service = include.service | default: 'echo' %}
 {%- assign port = include.port | default: '1027' %}
+{%- assign route_type = include.route_type | default: 'PathPrefix' %}
 
 {% capture the_code %}
 {% navtabs api %}
@@ -28,7 +29,7 @@ spec:
 {% endunless %}  rules:
   - matches:
     - path:
-        type: {{ include.route_type }}
+        type: {{ route_type }}
         value: {{ path }}
     backendRefs:
     - name: {{ service }}
@@ -53,7 +54,7 @@ spec:
   - {% unless include.skip_host %}host: {{ hostname }}
     {% endunless %}http:
       paths:
-      - path: {% if include.route_type == 'RegularExpression' %}/~{% endif %}{{ path }}
+      - path: {% if route_type == 'RegularExpression' %}/~{% endif %}{{ path }}
         pathType: ImplementationSpecific
         backend:
           service:
